@@ -74,6 +74,7 @@ module RunLater
         end
       rescue Exception => e
         logger.error("Worker thread crashed, retrying. Error was: #{e}")
+        logger.error(e.backtrace.join("\n"))
         flush_logger
         Thread.current[:running] = false
         retry
