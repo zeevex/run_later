@@ -6,9 +6,12 @@ module RunLater
   require 'run_later/railtie' if defined?(Rails)
 end
 
-ActionController::Base.send(:include, RunLater::InstanceMethods)
+ActionController::Base.send(:include, RunLater::InstanceMethods) if defined?(ActionController)
+
 # Make run_later available both as instance and class methods
-ActiveRecord::Base.send(:include, RunLater::InstanceMethods)
-ActiveRecord::Base.extend(RunLater::InstanceMethods)
-ActiveRecord::Observer.send(:include, RunLater::InstanceMethods)
-ActiveRecord::Observer.extend(RunLater::InstanceMethods)
+if defined?(ActiveRecord)
+  ActiveRecord::Base.send(:include, RunLater::InstanceMethods)
+  ActiveRecord::Base.extend(RunLater::InstanceMethods)
+  ActiveRecord::Observer.send(:include, RunLater::InstanceMethods)
+  ActiveRecord::Observer.extend(RunLater::InstanceMethods)
+end
