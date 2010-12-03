@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 require 'run_later/worker'
 require 'run_later/instance_methods'
 require 'timeout'
@@ -8,6 +8,7 @@ class WorkerTest < Test::Unit::TestCase
   
   context "A worker instance" do
     setup do
+      require 'rails'
       @logger = stub(:logger)
       @logger.stubs(:error)
       @logger.stubs(:flush)
@@ -45,7 +46,7 @@ class WorkerTest < Test::Unit::TestCase
 
     context "when shutting down the worker" do
       should "kill the thread" do
-        RunLater::Worker.instance.thread.expects(:kill!)
+        RunLater::Worker.instance.thread.expects(:kill)
         RunLater::Worker.shutdown
       end
       

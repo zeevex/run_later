@@ -39,7 +39,7 @@ module RunLater
       rescue Timeout::Error
         logger.error("Worker thread timed out. Forcing shutdown.")
       ensure
-        instance.thread.kill!
+        instance.thread.kill
       end
     end
 
@@ -58,7 +58,7 @@ module RunLater
       rescue Timeout::Error
         logger.warn("Worker thread takes too long and will be killed.")
         flush_logger
-        instance.thread.kill!
+        instance.thread.kill
         @worker = RunLater::Worker.new
       end
     end

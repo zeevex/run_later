@@ -1,10 +1,15 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 require 'run_later/instance_methods'
 require 'run_later/worker'
 
 class RunLaterTest < Test::Unit::TestCase
   include RunLater::InstanceMethods
   context "The queue" do
+    setup do
+      require 'rails'
+      require 'logger'
+      Rails.logger = Logger.new(STDOUT)
+    end
 
     should "be empty" do
       assert_equal 0, RunLater.queue.size
@@ -12,7 +17,7 @@ class RunLaterTest < Test::Unit::TestCase
     
     context "when adding a block with run_later" do
       setup do
-        RunLater::Worker.instance.thread.kill!
+        RunLater::Worker.instance.thread.kill
       end
       
       should "queue the specified block" do
