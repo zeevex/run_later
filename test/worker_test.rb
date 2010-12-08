@@ -8,7 +8,6 @@ class WorkerTest < Test::Unit::TestCase
   
   context "A worker instance" do
     setup do
-      require 'rails'
       @logger = stub(:logger)
       @logger.stubs(:error)
       @logger.stubs(:flush)

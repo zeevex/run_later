@@ -5,11 +5,6 @@ require 'run_later/worker'
 class RunLaterTest < Test::Unit::TestCase
   include RunLater::InstanceMethods
   context "The queue" do
-    setup do
-      require 'rails'
-      require 'logger'
-      Rails.logger = Logger.new(STDOUT)
-    end
 
     should "be empty" do
       assert_equal 0, RunLater.queue.size

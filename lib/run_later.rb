@@ -3,7 +3,12 @@ require 'run_later/instance_methods'
 require 'run_later/cleanup'
 
 module RunLater
-  require 'run_later/railtie' if defined?(Rails)
+  if defined?(Rails)
+    require 'run_later/railtie'
+    RUNLATER_LOGGER = Rails.logger
+  else
+    RUNLATER_LOGGER = ::RAILS_DEFAULT_LOGGER
+  end
 end
 
 ActionController::Base.send(:include, RunLater::InstanceMethods) if defined?(ActionController)
