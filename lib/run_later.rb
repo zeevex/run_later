@@ -3,7 +3,7 @@ require 'run_later/instance_methods'
 require 'run_later/cleanup'
 
 module RunLater
-  if defined?(Rails)
+  if defined?(Rails) && Rails::VERSION::MAJOR > 2
     require 'run_later/railtie'
     RUNLATER_LOGGER = Rails.logger
   else
