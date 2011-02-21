@@ -22,24 +22,42 @@ class WorkerTest < Test::Unit::TestCase
       assert_equal 0, RunLater.queue.size
     end
     
-    context "when throwing an error inside the block" do
+    context "when inside the block" do
       setup do
         run_later do
           "awesome!"
         end
         
-        queue = stub(:queue)
-        queue.stubs(:pop).raises(Exception).then.returns nil
-        RunLater.stubs(:queue).returns(queue)
+        @queue = stub(:queue)
+      end
+
+      context "and there is a standard error" do
+        setup do
+          @queue.stubs(:pop).raises(StandardError).then.returns nil
+          RunLater.stubs(:queue).returns(@queue)
+        end
+
+        should "continue working through the queue" do
+          assert_nothing_raised {@worker.process_queue}
+        end
+
+        should "log an error" do
+          @logger.expects(:error)
+          @worker.process_queue
+        end
       end
       
-      should "continue working through the queue" do
-        assert_nothing_raised {@worker.process_queue}
-      end
-      
-      should "log an error" do
-        @logger.expects(:error)
-        @worker.process_queue
+      context "and there is system exit error" do
+        setup do
+          @queue.stubs(:pop).raises(SystemExit).then.returns nil
+          RunLater.stubs(:queue).returns(@queue)
+        end
+
+        should "not continue working the queue" do
+          assert_raise(SystemExit) do
+            @worker.process_queue
+          end
+        end
       end
     end
 

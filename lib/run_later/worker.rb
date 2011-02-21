@@ -72,7 +72,7 @@ module RunLater
           Thread.current[:running] = false
           flush_logger
         end
-      rescue Exception => e
+      rescue StandardError => e
         logger.error("Worker thread crashed, retrying. Error was: #{e}")
         flush_logger
         Thread.current[:running] = false
